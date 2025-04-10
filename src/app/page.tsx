@@ -162,44 +162,44 @@ export default function Home() {
             <nav className="hidden lg:flex items-center">
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-1.5 border border-gray-700/50 shadow-inner shadow-black/10 mx-4">
                 <div className="flex space-x-1">
-                  <Link href="#about" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('about') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#about" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'about' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     About
                   </Link>
-                  <Link href="#features" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('features') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#features" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'features' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Features
                   </Link>
-                  <Link href="#technology" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('technology') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#technology" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'technology' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Technology
                   </Link>
-                  <Link href="#agents" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('agents') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#agents" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'agents' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Agents
                   </Link>
                   <div className="group relative">
-                    <button className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('strategy') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200 flex items-center'}`}>
+                    <button className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${['strategy', 'monitoring', 'wallet'].includes(activeSection) ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200 flex items-center'}`}>
                       Platform
                       <svg className="ml-1 h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 border border-gray-700 backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-                      <Link href="#strategy" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${isActive('strategy') ? 'bg-gray-700/70 text-white' : ''}`}>
+                      <Link href="#strategy" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${activeSection === 'strategy' ? 'bg-gray-700/70 text-white' : ''}`}>
                         Strategy Builder
                       </Link>
-                      <Link href="#monitoring" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${isActive('monitoring') ? 'bg-gray-700/70 text-white' : ''}`}>
+                      <Link href="#monitoring" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${activeSection === 'monitoring' ? 'bg-gray-700/70 text-white' : ''}`}>
                         Protocol Monitoring
                       </Link>
-                      <Link href="#wallet" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${isActive('wallet') ? 'bg-gray-700/70 text-white' : ''}`}>
+                      <Link href="#wallet" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${activeSection === 'wallet' ? 'bg-gray-700/70 text-white' : ''}`}>
                         Wallet Integration
                       </Link>
                     </div>
                   </div>
-                  <Link href="#tokenomics" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('tokenomics') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#tokenomics" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'tokenomics' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Tokenomics
                   </Link>
-                  <Link href="#roadmap" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('roadmap') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#roadmap" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'roadmap' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Roadmap
                   </Link>
-                  <Link href="#team" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('team') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#team" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${activeSection === 'team' ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Team
                   </Link>
                 </div>
