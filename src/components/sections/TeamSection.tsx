@@ -41,9 +41,9 @@ const teamMembers: TeamMember[] = [
   },
   {
     id: 'member-3',
-    name: 'Hamed Alrefaei ',
-    title: 'Head of Design',
-    bio: 'Specialist in design and branding for the DefiKSA brand.',
+    name: 'Hamed Al-Refaei ',
+    title: 'Founding Business Development',
+    bio: 'Specialist in Business and Development for DefiKSA partners, clients and institutions.',
     image: '/images/team/placeholder.png',
     socials: {
     //   linkedin: '#',
