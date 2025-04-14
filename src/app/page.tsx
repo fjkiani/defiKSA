@@ -58,9 +58,20 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   
+  // Effect to set isMounted to true only on the client after initial render
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Handle scroll events for header transparency and active section
   useEffect(() => {
+    // Only run scroll logic if the component is mounted on the client
+    if (!isMounted) {
+      return;
+    }
+
     const handleScroll = () => {
       // Handle header background
       const isScrolled = window.scrollY > 10;
@@ -82,21 +93,27 @@ export default function Home() {
         'team'
       ];
       
-      // Find the section that is currently most visible in the viewport
       let currentSection = '';
       let maxVisibility = 0;
+      const viewportCenter = window.innerHeight / 2;
       
       sections.forEach(section => {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          const isVisible = rect.top < window.innerHeight / 2 && rect.bottom > 0;
+          const isIntersectingCenter = rect.top < viewportCenter && rect.bottom > viewportCenter;
           
-          if (isVisible) {
-            // Calculate how much of the section is visible (as a ratio of the viewport height)
+          if (isIntersectingCenter) {
+            const distanceToCenter = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+            const visibilityScore = 1 / (distanceToCenter + 1);
+
+            if (currentSection === '' || visibilityScore > maxVisibility) {
+              maxVisibility = visibilityScore;
+              currentSection = section;
+            }
+          } else if (currentSection === '' && rect.top < window.innerHeight && rect.bottom > 0) {
             const visibleHeight = Math.min(window.innerHeight, rect.bottom) - Math.max(0, rect.top);
             const visibilityRatio = visibleHeight / window.innerHeight;
-            
             if (visibilityRatio > maxVisibility) {
               maxVisibility = visibilityRatio;
               currentSection = section;
@@ -104,25 +121,27 @@ export default function Home() {
           }
         }
       });
-      
+
+      if (window.scrollY < 100) {
+        currentSection = '';
+      }
+
       if (currentSection !== activeSection) {
         setActiveSection(currentSection);
       }
     };
     
-    window.addEventListener('scroll', handleScroll);
-    // Run once on mount to set initial active section
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [scrolled, activeSection]);
+  }, [isMounted, scrolled, activeSection]);
 
   // Function to check if a section is active
   const isActive = (section: string) => {
-    const element = document.getElementById(section);
-    if (!element) return false;
+    if (!isMounted) return false;
     return activeSection === section;
   };
 
@@ -162,26 +181,26 @@ export default function Home() {
             <nav className="hidden lg:flex items-center">
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-1.5 border border-gray-700/50 shadow-inner shadow-black/10 mx-4">
                 <div className="flex space-x-1">
-                  <Link href="#about" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('about') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#about" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('about') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     About
                   </Link>
-                  <Link href="#features" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('features') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#features" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('features') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Features
                   </Link>
-                  <Link href="#technology" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('technology') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#technology" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('technology') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Technology
                   </Link>
-                  <Link href="#agents" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('agents') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
-                    Agents
+                  <Link href="#agents" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('agents') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                    AI Agents
                   </Link>
                   <div className="group relative">
-                    <button className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('strategy') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200 flex items-center'}`}>
+                    <button className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${(isActive('strategy') || isActive('monitoring') || isActive('wallet')) ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200 flex items-center'}`}>
                       Platform
                       <svg className="ml-1 h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 border border-gray-700 backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 border border-gray-700 backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 dropdown-menu">
                       <Link href="#strategy" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${isActive('strategy') ? 'bg-gray-700/70 text-white' : ''}`}>
                         Strategy Builder
                       </Link>
@@ -193,13 +212,13 @@ export default function Home() {
                       </Link>
                     </div>
                   </div>
-                  <Link href="#tokenomics" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('tokenomics') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#tokenomics" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('tokenomics') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Tokenomics
                   </Link>
-                  <Link href="#roadmap" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('roadmap') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#roadmap" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('roadmap') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Roadmap
                   </Link>
-                  <Link href="#team" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('team') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#team" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('team') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Team
                   </Link>
                 </div>
