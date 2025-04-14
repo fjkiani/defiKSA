@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Source_Code_Pro } from "next/font/google";
-import MainLayoutClient from "@/components/MainLayoutClient";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${sourceCodePro.variable}`}>
       <body className="bg-gray-900 text-white antialiased">
-        <MainLayoutClient>{children}</MainLayoutClient>
+        {children}
       </body>
     </html>
   );
