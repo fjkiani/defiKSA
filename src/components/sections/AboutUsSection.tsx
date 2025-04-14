@@ -135,7 +135,7 @@ const AboutUsSection = () => {
 
         <div className="text-center">
           <Link 
-            href="https://app.cryptohedgefund.com" 
+            href="https://ora-hackathon.vercel.app/" 
             className="btn btn-primary shadow-xl hover:shadow-blue-600/20 inline-flex items-center"
           >
             Start Using Our Platform

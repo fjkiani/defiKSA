@@ -277,7 +277,7 @@ const WalletIntegrationPreview = () => {
         
         <div className="mt-16 text-center">
           <a 
-            href="https://app.cryptohedgefund.com" 
+            href="https://ora-hackathon.vercel.app/" 
             className="btn btn-primary shadow-xl hover:shadow-blue-600/20 inline-flex items-center"
           >
             Connect Your Wallet

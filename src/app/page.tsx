@@ -58,20 +58,10 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
   
-  // Effect to set isMounted to true only on the client after initial render
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   // Handle scroll events for header transparency and active section
   useEffect(() => {
-    // Only run scroll logic if the component is mounted on the client
-    if (!isMounted) {
-      return;
-    }
-
     const handleScroll = () => {
       // Handle header background
       const isScrolled = window.scrollY > 10;
@@ -93,27 +83,21 @@ export default function Home() {
         'team'
       ];
       
+      // Find the section that is currently most visible in the viewport
       let currentSection = '';
       let maxVisibility = 0;
-      const viewportCenter = window.innerHeight / 2;
       
       sections.forEach(section => {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          const isIntersectingCenter = rect.top < viewportCenter && rect.bottom > viewportCenter;
+          const isVisible = rect.top < window.innerHeight / 2 && rect.bottom > 0;
           
-          if (isIntersectingCenter) {
-            const distanceToCenter = Math.abs(rect.top + rect.height / 2 - viewportCenter);
-            const visibilityScore = 1 / (distanceToCenter + 1);
-
-            if (currentSection === '' || visibilityScore > maxVisibility) {
-              maxVisibility = visibilityScore;
-              currentSection = section;
-            }
-          } else if (currentSection === '' && rect.top < window.innerHeight && rect.bottom > 0) {
+          if (isVisible) {
+            // Calculate how much of the section is visible (as a ratio of the viewport height)
             const visibleHeight = Math.min(window.innerHeight, rect.bottom) - Math.max(0, rect.top);
             const visibilityRatio = visibleHeight / window.innerHeight;
+            
             if (visibilityRatio > maxVisibility) {
               maxVisibility = visibilityRatio;
               currentSection = section;
@@ -121,27 +105,24 @@ export default function Home() {
           }
         }
       });
-
-      if (window.scrollY < 100) {
-        currentSection = '';
-      }
-
+      
       if (currentSection !== activeSection) {
         setActiveSection(currentSection);
       }
     };
     
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll);
+    // Run once on mount to set initial active section
     handleScroll();
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMounted, scrolled, activeSection]);
+  }, [scrolled, activeSection]);
 
   // Function to check if a section is active
   const isActive = (section: string) => {
-    if (!isMounted) return false;
+    if (!isMounted) return false; 
     return activeSection === section;
   };
 
@@ -181,26 +162,26 @@ export default function Home() {
             <nav className="hidden lg:flex items-center">
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-1.5 border border-gray-700/50 shadow-inner shadow-black/10 mx-4">
                 <div className="flex space-x-1">
-                  <Link href="#about" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('about') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#about" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('about') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     About
                   </Link>
-                  <Link href="#features" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('features') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#features" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('features') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Features
                   </Link>
-                  <Link href="#technology" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('technology') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#technology" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('technology') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Technology
                   </Link>
-                  <Link href="#agents" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('agents') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
-                    AI Agents
+                  <Link href="#agents" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('agents') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                    Agents
                   </Link>
                   <div className="group relative">
-                    <button className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${(isActive('strategy') || isActive('monitoring') || isActive('wallet')) ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200 flex items-center'}`}>
+                    <button className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('strategy') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200 flex items-center'}`}>
                       Platform
                       <svg className="ml-1 h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 border border-gray-700 backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 dropdown-menu">
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 border border-gray-700 backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
                       <Link href="#strategy" className={`block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 hover:text-white ${isActive('strategy') ? 'bg-gray-700/70 text-white' : ''}`}>
                         Strategy Builder
                       </Link>
@@ -212,13 +193,13 @@ export default function Home() {
                       </Link>
                     </div>
                   </div>
-                  <Link href="#tokenomics" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('tokenomics') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#tokenomics" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('tokenomics') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Tokenomics
                   </Link>
-                  <Link href="#roadmap" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('roadmap') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#roadmap" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('roadmap') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Roadmap
                   </Link>
-                  <Link href="#team" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('team') ? 'active text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
+                  <Link href="#team" className={`nav-link px-4 py-2 rounded-full text-sm font-medium ${isActive('team') ? 'text-white bg-gray-700/50' : 'hover:text-white hover:bg-gray-700/50 transition-all duration-200'}`}>
                     Team
                   </Link>
                 </div>
@@ -242,7 +223,7 @@ export default function Home() {
             {/* CTA Button - Desktop */}
             <div className="hidden lg:flex items-center ml-4">
               <a 
-                href="https://app.cryptohedgefund.com"
+                href="https://ora-hackathon.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-600/30 font-medium text-sm flex items-center"
@@ -264,12 +245,15 @@ export default function Home() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">
               DefiKSA: <span className="text-gradient-blue">Intelligent</span> <span className="text-gradient-purple">Sharia-Compliant</span><br/> Financial Solutions
             </h1>
+             <span className="inline-block bg-blue-600/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            🏆 NYU Hackathon Winner
+          </span>
             <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto animate-slideUp">
               Leveraging AI and blockchain for secure, transparent financial solutions tailored for the KSA market, designed with Sharia principles in mind.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn">
               <a 
-                href="https://app.cryptohedgefund.com"
+                href="https://ora-hackathon.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary shadow-xl hover:shadow-blue-600/20"
@@ -404,14 +388,18 @@ export default function Home() {
             Join our platform today and experience the power of AI-driven investment strategies with institutional-grade risk management.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <a 
-              href="https://app.cryptohedgefund.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white hover:bg-gray-100 text-blue-600 px-8 py-4 rounded-lg font-bold text-lg transition-colors inline-block shadow-xl hover:shadow-white/20"
-            >
-              Launch Application
-            </a>
+            <div className="relative group">
+              <a 
+                href="https://ora-hackathon.vercel.app/"
+                aria-disabled="true"
+                className="bg-gray-600 text-gray-400 px-8 py-4 rounded-lg font-bold text-lg inline-block shadow-md cursor-not-allowed"
+              >
+                Launch Application
+              </a>
+              <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                Coming Soon
+              </span>
+            </div>
             <Link 
               href="/whitepaper" 
               className="bg-transparent border-2 border-white hover:bg-white/10 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors inline-block"
@@ -436,10 +424,10 @@ export default function Home() {
               <p className="text-gray-400 mb-6">
                 DefiKSA provides intelligent, Sharia-compliant financial solutions powered by AI and blockchain technology, tailored for the KSA market.
               </p>
-              <div className="flex space-x-4">
+              {/* <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0,010 10.64v.052a4.105 4.105 0,0,0,3.292 4.022,4.095 4.095,0,0,1-1.853.07 4.108 4.108,0,0,0,3.834 2.85A8.233 8.233,0,0,1,2 19.008a11.616 11.616,0,0,0,6.29 1.84"></path>
+                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0,010 10.64v.052a4.105 4.105 0 0,0,3.292 4.022,4.095 4.095 0,0,1-1.853.07 4.108 4.108,0 0,0,3.834 2.85A8.233 8.233,0,0,1,2 19.008a11.616 11.616,0,0,0,6.29 1.84"></path>
                   </svg>
                 </a>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -452,7 +440,7 @@ export default function Home() {
                     <path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z" clipRule="evenodd"></path>
                   </svg>
                 </a>
-              </div>
+              </div> */}
             </div>
             <div>
               <h4 className="font-semibold mb-5">Platform</h4>
@@ -475,15 +463,18 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-5">Connect</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Discord</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Telegram</a></li>
+                {/* <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a></li> */}
+                <li><a href="https://discord.gg/yeMaKDMmSD" className="text-gray-400 hover:text-white transition-colors">Discord</a></li>
+                {/* <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Telegram</a></li> */}
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
             <p className="text-gray-500">
               &copy; {new Date().getFullYear()} DefiKSA. All rights reserved.
+            </p>
+            <p className="text-gray-500 text-sm mt-2">
+              Proudly Built by <a href="https://jedilabs.org/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 transition-colors">Jedi Labs</a>
             </p>
           </div>
         </div>
