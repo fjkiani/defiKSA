@@ -156,7 +156,7 @@ const StrategyPreview = () => {
         
         <div className="mt-12 text-center">
           <a 
-            href="https://app.cryptohedgefund.com" 
+            href="#" 
             className="btn btn-primary shadow-xl hover:shadow-blue-600/20 inline-flex items-center"
           >
             Build Your Strategy

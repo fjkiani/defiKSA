@@ -22,8 +22,8 @@ export default function WhitepaperPage() {
         });
       },
       {
-        rootMargin: '-100px 0px -100px 0px',
-        threshold: 0.3,
+        rootMargin: '-80px 0px -80% 0px',
+        threshold: [0, 0.2, 0.4, 0.6, 0.8, 1]
       }
     );
 
@@ -57,6 +57,21 @@ export default function WhitepaperPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Scroll into view handler for manual navigation
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerOffset = 100; // Account for fixed header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-blue-900/20 to-gray-900 relative">
       {/* Background decorations */}
@@ -71,71 +86,29 @@ export default function WhitepaperPage() {
         ></div>
       </div>
       
-      {/* Header/Navigation */}
-      <header className="fixed top-0 left-0 right-0 bg-gray-900/90 backdrop-blur-md z-40 border-b border-gray-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-2">
-                <span className="text-xl font-bold text-white">DefiKSA</span>
-              </Link>
-            </div>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/#features" className="text-gray-300 hover:text-white transition-colors">
-                Features
-              </Link>
-              <Link href="/#technology" className="text-gray-300 hover:text-white transition-colors">
-                Technology
-              </Link>
-              <Link href="/#tokenomics" className="text-gray-300 hover:text-white transition-colors">
-                Tokenomics
-              </Link>
-              <Link href="/#roadmap" className="text-gray-300 hover:text-white transition-colors">
-                Roadmap
-              </Link>
-              <Link href="/whitepaper" className="text-blue-400 hover:text-blue-300 transition-colors">
-                Whitepaper
-              </Link>
-            </nav>
-
-            {/* CTA Button */}
-            <div className="flex items-center">
-              <a 
-                href="https://app.cryptohedgefund.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                Launch App
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Whitepaper Content */}
       <main className="pt-28 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              CryptoHedgeFund <span className="text-blue-400">Whitepaper</span>
+              DefiKSA <span className="text-blue-400">Whitepaper</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              A comprehensive overview of our AI-powered crypto hedge fund platform, its technology, tokenomics, and roadmap.
+              A comprehensive overview of our AI-powered, Sharia-compliant financial platform, its technology, and roadmap.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar Navigation - Fixed on Desktop */}
             <div className="lg:col-span-1">
-              <div className="lg:sticky lg:top-32">
+              <div className="lg:sticky lg:top-28">
                 <WhitepaperNav 
                   sections={whitepaperData} 
                   activeSection={activeSection} 
-                  setActiveSection={setActiveSection} 
+                  setActiveSection={(sectionId) => {
+                    setActiveSection(sectionId);
+                    scrollToSection(sectionId);
+                  }}
                 />
                 
                 <div className="mt-6 text-center">
@@ -182,14 +155,15 @@ export default function WhitepaperPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-bold text-xl mb-4">CryptoHedgeFund</h3>
+              <h3 className="font-bold text-xl mb-4">DefiKSA</h3>
               <p className="text-gray-400 mb-4">
-                AI-powered crypto investment platform with advanced risk management.
+                Intelligent, Sharia-compliant financial solutions powered by AI and blockchain technology, tailored for the KSA market.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Platform</h4>
               <ul className="space-y-2">
+                <li><Link href="/#about" className="text-gray-400 hover:text-white">About Us</Link></li>
                 <li><Link href="/#features" className="text-gray-400 hover:text-white">Features</Link></li>
                 <li><Link href="/#technology" className="text-gray-400 hover:text-white">Technology</Link></li>
                 <li><Link href="/#roadmap" className="text-gray-400 hover:text-white">Roadmap</Link></li>
@@ -199,22 +173,23 @@ export default function WhitepaperPage() {
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2">
                 <li><Link href="/whitepaper" className="text-gray-400 hover:text-white">Whitepaper</Link></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Documentation</a></li>
+                <li><Link href="/learn" className="text-gray-400 hover:text-white">Learn</Link></li>
                 <li><a href="#" className="text-gray-400 hover:text-white">FAQ</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Connect</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white">Twitter</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Discord</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Telegram</a></li>
+                <li><a href="https://discord.gg/yeMaKDMmSD" className="text-gray-400 hover:text-white">Discord</a></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
             <p className="text-gray-500">
-              &copy; {new Date().getFullYear()} CryptoHedgeFund. All rights reserved.
+              &copy; {new Date().getFullYear()} DefiKSA. All rights reserved.
+            </p>
+            <p className="text-gray-500 text-sm mt-2">
+              Proudly Built by <a href="https://jedilabs.org/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 transition-colors">Jedi Labs</a>
             </p>
           </div>
         </div>

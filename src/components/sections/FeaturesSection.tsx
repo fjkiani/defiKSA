@@ -114,12 +114,12 @@ const FeaturesSection = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <a
+            {/* <a
               href="https://app.cryptohedgefund.com"
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors inline-block font-semibold shadow-lg hover:shadow-blue-600/20"
             >
               Explore All Features
-            </a>
+            </a> */}
           </motion.div>
         </div>
       </div>

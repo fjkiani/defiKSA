@@ -147,14 +147,23 @@ export default function Home() {
           <div className="flex justify-between items-center py-1">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-3 group">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20 transition-transform duration-300 group-hover:scale-110">
-                  <span className="text-white font-bold text-xl">DK</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold text-white">DefiKSA</span>
-                  
-                </div>
+              <Link href="/" className="flex flex-col items-center group">
+                <Image
+                  src="/images/logo.png"
+                  alt="DefiKSA Logo"
+                  width={48}
+                  height={48}
+                  className={`w-12 h-12 object-contain transition-all duration-500 ${
+                    scrolled 
+                      ? 'opacity-100 scale-100 translate-y-0' 
+                      : 'opacity-0 scale-95 -translate-y-4'
+                  }`}
+                />
+                <span className={`text-xl font-bold text-white mt-1 transition-all duration-500 ${
+                  scrolled 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 -translate-y-4'
+                }`}>DefiKSA</span>
               </Link>
             </div>
 
@@ -204,6 +213,9 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
+              <Link href="/learn" className="nav-link ml-2 px-5 py-2 rounded-full text-sm font-medium border border-blue-500/30 hover:border-blue-500 text-blue-400 hover:text-white hover:bg-blue-600/20 transition-all duration-200">
+                Learn
+              </Link>
               <Link href="/whitepaper" className="nav-link ml-2 px-5 py-2 rounded-full text-sm font-medium border border-blue-500/30 hover:border-blue-500 text-blue-400 hover:text-white hover:bg-blue-600/20 transition-all duration-200">
                 Whitepaper
               </Link>
@@ -223,7 +235,7 @@ export default function Home() {
             {/* CTA Button - Desktop */}
             <div className="hidden lg:flex items-center ml-4">
               <a 
-                href="https://ora-hackathon.vercel.app/"
+                href=""
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-600/30 font-medium text-sm flex items-center"
@@ -253,7 +265,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn">
               <a 
-                href="https://ora-hackathon.vercel.app"
+                href=""
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary shadow-xl hover:shadow-blue-600/20"
@@ -424,7 +436,7 @@ export default function Home() {
               <p className="text-gray-400 mb-6">
                 DefiKSA provides intelligent, Sharia-compliant financial solutions powered by AI and blockchain technology, tailored for the KSA market.
               </p>
-              {/* <div className="flex space-x-4">
+              <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0,010 10.64v.052a4.105 4.105 0 0,0,3.292 4.022,4.095 4.095 0,0,1-1.853.07 4.108 4.108,0 0,0,3.834 2.85A8.233 8.233,0,0,1,2 19.008a11.616 11.616,0,0,0,6.29 1.84"></path>
@@ -440,7 +452,7 @@ export default function Home() {
                     <path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z" clipRule="evenodd"></path>
                   </svg>
                 </a>
-              </div> */}
+              </div>
             </div>
             <div>
               <h4 className="font-semibold mb-5">Platform</h4>

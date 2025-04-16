@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -46,14 +47,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md animate-fadeIn">
       <div className="mobile-menu-content h-full flex flex-col px-6 py-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-10">
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20 transition-transform duration-300 group-hover:scale-110">
-              <span className="text-white font-bold text-xl">CH</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold text-white">CryptoHedgeFund</span>
-              <span className="text-xs text-blue-400 font-medium -mt-1">AI-Powered Investment</span>
-            </div>
+          <Link href="/" className="flex flex-col items-center group">
+            <Image
+              src="/images/logo.png"
+              alt="DefiKSA Logo"
+              width={48}
+              height={48}
+              className="w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-110"
+            />
+            <span className="text-xl font-bold text-white mt-1">DefiKSA</span>
+            <span className="text-xs text-blue-400 font-medium">AI-Powered Islamic Finance</span>
           </Link>
           <button 
             onClick={onClose} 
@@ -161,6 +164,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           </div>
           
           <Link 
+            href="/learn" 
+            className="text-blue-400 hover:text-white py-4 px-5 flex items-center bg-gray-800/30 backdrop-blur-sm rounded-xl border border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-600/20 transition-all duration-200 mb-4"
+            onClick={onClose}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            Learn
+          </Link>
+          
+          <Link 
             href="/whitepaper" 
             className="text-blue-400 hover:text-white py-4 px-5 flex items-center bg-gray-800/30 backdrop-blur-sm rounded-xl border border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-600/20 transition-all duration-200 mb-8"
             onClick={onClose}
@@ -174,7 +188,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
         
         <div className="mt-auto">
           <a 
-            href="https://app.cryptohedgefund.com"
+            href=""
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-medium text-center transition-all duration-300 shadow-lg shadow-blue-600/20 flex items-center justify-center"
